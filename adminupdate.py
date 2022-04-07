@@ -147,10 +147,12 @@ def updateAdminGroup(proxy_url,sessiontoken,gw,group_id):
         response = requests.get(myGetURL, headers=myHeader)
         json_response = response.json()
 
-        if str(response.status_code) == "404":
-            print("Group " + group_id + "does not exist for " + gw + ".  Will attempt to create it.")
+        if response.status_code == 404:
+            print("Group " + group_id + " does not exist for " + gw + ".  Will attempt to create it.")
             # Create the group and add the current IP4 address
-            if newSDDCGroupIPaddress(proxy_url,sessiontoken,gw,group_id,current_ipv4_address) != "200":
+            ip_address_list = []
+            ip_address_list.append(current_ipv4_address)
+            if newSDDCGroupIPaddress(proxy_url,sessiontoken,gw,group_id,current_ipv4_address) != 200:
                 print("Unable to create group " + group_id)
             else:
                 print("Created group " + group_id + " and added IP address " + current_ipv4_address)
